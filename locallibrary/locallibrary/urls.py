@@ -28,7 +28,7 @@ urlpatterns += [
     path('catalog/', include('catalog.urls')),
 ]
 
-# this urlpattern will redirect root / to catalog/
+# this urlpattern will redirect root to catalog/
 urlpatterns += [
     path('', RedirectView.as_view(url='catalog/', permanent=True)),
 ]
