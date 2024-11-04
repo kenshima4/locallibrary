@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <!-- author detail link not yet defined -->
+  <h1><strong>Author:</strong> <a>{{ author }}</a></h1>
+  
+  {% if author.book_set %}
+    <ul>
+      {% for book in author.book_set.all %}
+      <li>
+        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+        ({{author}})
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no books belonging to {{ author }}.</p>
+  {% endif %}
+
+  
+{% endblock %}
