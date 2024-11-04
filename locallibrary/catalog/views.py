@@ -4,7 +4,9 @@ from django.shortcuts import render
 
 from .models import Book, Author, BookInstance, Genre
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+
+# checking if login or permission required (for class based views)
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 def index(request):
     """View function for home page of site."""
@@ -70,5 +72,23 @@ class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
         return (
             BookInstance.objects.filter(borrower=self.request.user)
             .filter(status__exact='o')
+            .order_by('due_back')
+        )
+
+
+
+class LoanedBooksAllUsersListView(PermissionRequiredMixin, generic.ListView):
+    # Multiple permissions
+    # Note that 'catalog.change_book' is permission
+    # Is created automatically for the book model, along with add_book, and delete_book
+    permission_required = ('catalog.can_mark_returned', 'catalog.change_book')
+
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_all_users.html'
+    paginate_by = 10
+    
+    def get_queryset(self):
+        return (
+            BookInstance.objects.filter(status__exact='o')
             .order_by('due_back')
         )

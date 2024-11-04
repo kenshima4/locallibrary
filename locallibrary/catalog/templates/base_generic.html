@@ -25,6 +25,7 @@
                 <li><a href="{% url 'books' %}">All books</a></li>
                 <li><a href="{% url 'authors' %}">All authors</a></li>
             
+
                 {% if user.is_authenticated %}
                 <li>User: {{ user.get_username }}</li>
 
@@ -37,9 +38,21 @@
                     <button type="submit" class="btn btn-link">Logout</button>
                 </form>
                 </li>
+
+                {% if user.is_staff %}
+
+                    <li>Staff</li>
+
+                    <li><a href="{% url 'all-borrowed' %}">All Borrowed</a></li>
+
+                {% endif %}
+
                 {% else %}
                     <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
                 {% endif %}
+
+                
+
             </ul>
             {% endblock %}
         </div>
@@ -69,3 +82,4 @@
     </div>
   </body>
 </html>
+
